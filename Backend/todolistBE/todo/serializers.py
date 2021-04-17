@@ -12,5 +12,10 @@ class TagSerializer(serializers.ModelSerializer):
 class ToDoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ('id','author','title','body','created_at','updated_at')
-        read_only_fields = ('id',)
+        fields = ('id','title','body','author','created_at','updated_at')
+        read_only_fields = ('id','author')
+
+    # def create(self):
+    #         vv =  self.context['request'].user
+    #         title = self.validated_data['title']
+    #         body = self.validated_data['body']

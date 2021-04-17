@@ -20,7 +20,7 @@ class TagViewSet(viewsets.GenericViewSet,mixins.ListModelMixin):
 
     def get_queryset(self):
         """return objects for the current auth user only """
-        return self.queryset.filter(user=self.request.user).order_by('-name')
+        return self.queryset.filter(author=self.request.user).order_by('-name')
 
 
 class TodoList(generics.ListCreateAPIView):
@@ -28,6 +28,13 @@ class TodoList(generics.ListCreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = serializers.ToDoSerializer
+    def get_queryset(self):
+        """return objects for the current auth user only """
+        return self.queryset.filter(author=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 
 class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.all()
